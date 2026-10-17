@@ -103,7 +103,7 @@ function sendVerificationCode() {
     msg.innerText = "Sending verification code...";
 
     // Send the email via EmailJS
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+    emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams)
         .then(function(response) {
             msg.style.color = "#22c55e";
             msg.innerText = "Code sent! Check your inbox.";
