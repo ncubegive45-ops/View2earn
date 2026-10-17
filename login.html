@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View2Earn - Account / Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">View2<span>Earn</span></div>
+        <nav>
+            <a href="index.html" style="color: var(--text-muted); text-decoration: none; margin-right: 1.5rem; font-weight: 600;">Dashboard</a>
+            <a href="payout.html" style="color: var(--text-muted); text-decoration: none; margin-right: 1.5rem; font-weight: 600;">Withdraw</a>
+            <a href="referrals.html" style="color: var(--text-muted); text-decoration: none; margin-right: 1.5rem; font-weight: 600;">Referrals</a>
+            <a href="login.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Account</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>Welcome to View2Earn</h1>
+            <p>Log in or create your account to sync your earnings.</p>
+        </div>
+
+        <div style="max-width: 400px; margin: 0 auto; background-color: var(--card-bg); padding: 2rem; border-radius: 12px; border: 1px solid #334155;">
+            
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Email Address</label>
+                <input type="email" id="user-email" placeholder="name@example.com" style="width: 100%; padding: 0.75rem; border-radius: 6px; background-color: #0f172a; color: white; border: 1px solid #334155;">
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Password</label>
+                <input type="password" id="user-pass" placeholder="••••••••" style="width: 100%; padding: 0.75rem; border-radius: 6px; background-color: #0f172a; color: white; border: 1px solid #334155;">
+            </div>
+
+            <button onclick="handleAuth()" class="watch-btn" style="background-color: var(--primary); margin-bottom: 1rem;">Sign In / Register</button>
+            <p id="auth-msg" style="text-align: center; font-size: 0.85rem; height: 1rem;"></p>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 View2Earn. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function handleAuth() {
+            const email = document.getElementById('user-email').value;
+            const msg = document.getElementById('auth-msg');
+
+            if (!email) {
+                msg.style.color = "#ef4444";
+                msg.innerText = "Please enter a valid email.";
+                return;
+            }
+
+            localStorage.setItem('userEmail', email);
+            msg.style.color = "#22c55e";
+            msg.innerText = "Successfully logged in as " + email;
+            
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
