@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View2Earn - Payouts</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">View2<span>Earn</span></div>
+        
+                <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Dashboard
+        </a>
+        <a href="referrals.html" class="bottom-nav-item">
+            <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            Referrals
+        </a>
+        <a href="payout.html" class="bottom-nav-item active">
+            <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            Withdraw
+        </a>
+        <a href="menu.html" class="bottom-nav-item">
+            <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+            Menu
+        </a>
+    </nav>
+
+
+    </header>
+
+    <main>
+        <div class="hero">
+            <h1>Request a Payout</h1>
+            <p>Cash out your earnings directly to your preferred payment method.</p>
+        </div>
+
+        <div style="max-width: 500px; margin: 0 auto; background-color: var(--card-bg); padding: 2rem; border-radius: 12px; border: 1px solid #334155;">
+            <div style="margin-bottom: 1.5rem; text-align: center;">
+                <span style="color: var(--text-muted); font-size: 0.9rem;">Available Balance</span>
+                <h2 style="font-size: 2rem; color: var(--accent);">$<span id="payout-balance">0.00</span></h2>
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Select Payout Method</label>
+                <select id="payout-method" style="width: 100%; padding: 0.75rem; border-radius: 6px; background-color: #0f172a; color: white; border: 1px solid #334155;">
+                    <option value="paypal">PayPal</option>
+                    <option value="crypto">Crypto Wallet</option>
+                    <option value="bank">Bank Transfer</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Account / Wallet Address</label>
+                <input type="text" id="account-details" placeholder="Enter your email or wallet address" style="width: 100%; padding: 0.75rem; border-radius: 6px; background-color: #0f172a; color: white; border: 1px solid #334155;">
+            </div>
+
+            <button onclick="requestPayout()" class="watch-btn" style="background-color: var(--accent); color: #000;">Withdraw Funds</button>
+            <p id="payout-message" style="text-align: center; margin-top: 1rem; font-size: 0.9rem;"></p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 View2Earn. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Placeholder check for balance demo
+        let balance = localStorage.getItem('userBalance') || '0.00';
+        document.getElementById('payout-balance').innerText = parseFloat(balance).toFixed(2);
+
+        function requestPayout() {
+            const method = document.getElementById('payout-method').value;
+            const details = document.getElementById('account-details').value;
+            const msg = document.getElementById('payout-message');
+
+            if (!details) {
+                msg.style.color = "#ef4444";
+                msg.innerText = "Please enter your account details.";
+                return;
+            }
+
+            msg.style.color = "#22c55e";
+            msg.innerText = `Success! Withdrawal request via ${method.toUpperCase()} submitted.`;
+        }
+    </script>
+</body>
+</html>
