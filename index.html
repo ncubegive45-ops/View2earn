@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View2Earn - Watch & Earn Rewards</title>
     <link rel="stylesheet" href="style.css">
+
+    <script>
+    // Check if the user has logged in
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) {
+        // If no email is found, redirect them to the login page immediately
+        window.location.href = "login.html";
+    }
+    </script>
 </head>
 <body>
 
