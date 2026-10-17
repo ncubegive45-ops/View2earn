@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View2Earn - Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">View2<span>Earn</span> <span style="font-size: 0.8rem; background-color: var(--primary); padding: 2px 6px; border-radius: 4px; color: white;">Admin</span></div>
+        <div class="wallet-badge">Balance: $<span id="balance">0.00</span></div>
+    </header>
+
+    <main>
+        <div class="hero" style="margin-bottom: 1.5rem;">
+            <h1>Admin Control Panel</h1>
+            <p>Upload new videos and configure reward rates for your users.</p>
+        </div>
+
+        <div style="max-width: 600px; margin: 0 auto; background-color: var(--card-bg); padding: 2rem; border-radius: 12px; border: 1px solid #334155; margin-bottom: 2rem;">
+            <h3 style="margin-bottom: 1.25rem; color: var(--primary);">➕ Add New Reward Video</h3>
+            
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Video Title</label>
+                <input type="text" id="admin-title" placeholder="e.g., Advanced JavaScript Tips" style="width: 100%; padding: 0.75rem; border-radius: 6px; background-color: #0f172a; color: white; border: 1px solid #334155;">
+            </div>
+
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Video URL / Embed Link</label>
+                <input type="text" id="admin-url" placeholder="https://youtube.com/..." style="width: 100%; padding: 0.75rem; border-radius: 6px; background-color: #0f172a; color: white; border: 1px solid #334155;">
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Reward Amount ($)</label>
+                <input type="number" id="admin-reward" step="0.01" value="0.05" style="width: 100%; padding: 0.75rem; border-radius: 6px; background-color: #0f172a; color: white; border: 1px solid #334155;">
+            </div>
+
+            <button onclick="addNewVideo()" class="watch-btn" style="background-color: var(--accent); color: #000;">Publish Video</button>
+            <p id="admin-msg" style="text-align: center; margin-top: 1rem; font-size: 0.85rem;"></p>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span>🏠</span> Dashboard
+        </a>
+        <a href="referrals.html" class="bottom-nav-item">
+            <span>👥</span> Referrals
+        </a>
+        <a href="payout.html" class="bottom-nav-item">
+            <span>💸</span> Withdraw
+        </a>
+        <a href="menu.html" class="bottom-nav-item">
+            <span>☰</span> Menu
+        </a>
+    </nav>
+
+    <footer>
+        <p>&copy; 2026 View2Earn. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let balance = parseFloat(localStorage.getItem('userBalance')) || 0.00;
+        document.getElementById('balance').innerText = balance.toFixed(2);
+
+        function addNewVideo() {
+            const title = document.getElementById('admin-title').value;
+            const url = document.getElementById('admin-url').value;
+            const reward = document.getElementById('admin-reward').value;
+            const msg = document.getElementById('admin-msg');
+
+            if (!title || !url) {
+                msg.style.color = "#ef4444";
+                msg.innerText = "Please fill in all video details.";
+                return;
+            }
+
+            // Save video to local storage list so index.html can load it dynamically
+            let customVideos = JSON.parse(localStorage.getItem('customVideos')) || [];
+            customVideos.push({ title, url, reward: parseFloat(reward).toFixed(2) });
+            localStorage.setItem('customVideos', JSON.stringify(customVideos));
+
+            msg.style.color = "#22c55e";
+            msg.innerText = "Success! Video published to the platform.";
+            
+            document.getElementById('admin-title').value = '';
+            document.getElementById('admin-url').value = '';
+        }
+    </script>
+</body>
+</html>
