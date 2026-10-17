@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View2Earn - History & Ledger</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">View2<span>Earn</span></div>
+        <div class="wallet-badge">Balance: $<span id="balance">0.00</span></div>
+    </header>
+
+    <main>
+        <div class="hero" style="margin-bottom: 1.5rem;">
+            <h1>Activity & Transaction History</h1>
+            <p>Review your completed video earnings and payout requests.</p>
+        </div>
+
+        <div style="max-width: 600px; margin: 0 auto; background-color: var(--card-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid #334155;">
+            <h3 style="margin-bottom: 1rem; color: var(--text);">📜 Recent Activity</h3>
+            
+            <div id="history-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <!-- History items will load here dynamically -->
+                <div style="padding: 1rem; background-color: #0f172a; border-radius: 8px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="font-size: 0.9rem; display: block; color: var(--text);">Welcome Bonus</strong>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">Account Created</span>
+                    </div>
+                    <span style="color: var(--accent); font-weight: bold; font-size: 0.95rem;">+$0.00</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span>🏠</span> Dashboard
+        </a>
+        <a href="referrals.html" class="bottom-nav-item">
+            <span>👥</span> Referrals
+        </a>
+        <a href="payout.html" class="bottom-nav-item">
+            <span>💸</span> Withdraw
+        </a>
+        <a href="menu.html" class="bottom-nav-item active">
+            <span>☰</span> Menu
+        </a>
+    </nav>
+
+    <footer>
+        <p>&copy; 2026 View2Earn. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let balance = parseFloat(localStorage.getItem('userBalance')) || 0.00;
+        document.getElementById('balance').innerText = balance.toFixed(2);
+
+        // Load transaction history from localStorage if available
+        let history = JSON.parse(localStorage.getItem('userHistory')) || [
+            { title: "Account Registration Bonus", type: "earned", amount: "0.00", date: "Today" }
+        ];
+
+        let historyContainer = document.getElementById('history-list');
+        historyContainer.innerHTML = '';
+
+        history.forEach(item => {
+            let isPositive = item.type === 'earned';
+            let color = isPositive ? 'var(--accent)' : '#ef4444';
+            let sign = isPositive ? '+' : '-';
+
+            historyContainer.innerHTML += `
+                <div style="padding: 1rem; background-color: #0f172a; border-radius: 8px; border: 1px solid #334155; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong style="font-size: 0.9rem; display: block; color: var(--text);">${item.title}</strong>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">${item.date || 'Recent'}</span>
+                    </div>
+                    <span style="color: ${color}; font-weight: bold; font-size: 0.95rem;">${sign}$${item.amount}</span>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>
