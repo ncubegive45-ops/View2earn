@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View2Earn - Menu & Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">View2<span>Earn</span></div>
+        <div class="wallet-badge">Balance: $<span id="balance">0.00</span></div>
+    </header>
+
+    <main>
+        <div class="hero" style="margin-bottom: 1.5rem;">
+            <h1>Menu & Profile</h1>
+            <p>Manage your account, search content, and view FAQs.</p>
+        </div>
+
+        <!-- Search Bar Section -->
+        <div style="max-width: 600px; margin: 0 auto 2rem auto;">
+            <input type="text" id="app-search" placeholder="Search videos, FAQs, or settings..." onkeyup="filterContent()" style="width: 100%; padding: 0.85rem 1rem; border-radius: 8px; background-color: var(--card-bg); color: white; border: 1px solid #334155; font-size: 0.95rem;">
+        </div>
+
+        <div style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
+            
+            <!-- Profile Card -->
+            <div style="background-color: var(--card-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid #334155;">
+                <h3 style="margin-bottom: 0.75rem; color: var(--primary);">👤 My Profile</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Email: <span id="profile-email" style="color: var(--text);">Not logged in</span></p>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Account Status: <span style="color: var(--accent);">Active</span></p>
+                <a href="login.html" style="display: inline-block; background-color: #334155; color: white; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">Switch / Login Account</a>
+            </div>
+
+            <!-- Quick Withdraw Card -->
+            <div style="background-color: var(--card-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid #334155;">
+                <h3 style="margin-bottom: 0.75rem; color: var(--accent);">💳 Withdrawals</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Ready to cash out your video earnings? Choose your payout method securely.</p>
+                <a href="payout.html" style="display: inline-block; background-color: var(--primary); color: white; padding: 0.6rem 1.25rem; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: bold;">Go to Payouts</a>
+            </div>
+
+            <!-- FAQ Section -->
+            <div style="background-color: var(--card-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid #334155;" id="faq-section">
+                <h3 style="margin-bottom: 1rem; color: var(--text);">❓ Frequently Asked Questions</h3>
+                
+                <div style="margin-bottom: 1rem; border-bottom: 1px solid #334155; padding-bottom: 0.75rem;">
+                    <strong style="font-size: 0.95rem; display: block; margin-bottom: 0.25rem;">How do I earn money?</strong>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">Simply go to the dashboard, click "Watch & Earn" on any video, and let the timer finish to get credited instantly.</p>
+                </div>
+
+                <div style="margin-bottom: 1rem; border-bottom: 1px solid #334155; padding-bottom: 0.75rem;">
+                    <strong style="font-size: 0.95rem; display: block; margin-bottom: 0.25rem;">What is the minimum withdrawal limit?</strong>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">You can request a payout once your balance reaches a minimum of $5.00.</p>
+                </div>
+
+                <div>
+                    <strong style="font-size: 0.95rem; display: block; margin-bottom: 0.25rem;">How do referrals work?</strong>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">Share your unique link from the Referrals tab and earn 10% lifetime commission on your friends' earnings.</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span>🏠</span> Dashboard
+        </a>
+        <a href="referrals.html" class="bottom-nav-item">
+            <span>👥</span> Referrals
+        </a>
+        <a href="payout.html" class="bottom-nav-item">
+            <span>💸</span> Withdraw
+        </a>
+        <a href="menu.html" class="bottom-nav-item active">
+            <span>☰</span> Menu
+        </a>
+    </nav>
+
+    <footer>
+        <p>&copy; 2026 View2Earn. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Load Balance & Email
+        let balance = parseFloat(localStorage.getItem('userBalance')) || 0.00;
+        document.getElementById('balance').innerText = balance.toFixed(2);
+
+        let savedEmail = localStorage.getItem('userEmail');
+        if(savedEmail) {
+            document.getElementById('profile-email').innerText = savedEmail;
+        }
+
+        // Simple Search / Filter Function
+        function filterContent() {
+            let query = document.getElementById('app-search').value.toLowerCase();
+            let faqSection = document.getElementById('faq-section');
+            
+            // Basic filtering feedback for demo purposes
+            if(query.includes('withdraw')) {
+                faqSection.style.border = "2px solid var(--accent)";
+            } else {
+                faqSection.style.border = "1px solid #334155";
+            }
+        }
+    </script>
+</body>
+</html>
