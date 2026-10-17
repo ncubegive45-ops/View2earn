@@ -34,7 +34,7 @@
             <div style="margin-bottom: 1.5rem;">
                 <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Password</label>
                 <input type="password" id="user-pass" placeholder="••••••••" minlength="8" required ...>
-
+                
             <button onclick="handleAuth()" class="watch-btn" style="background-color: var(--primary); margin-bottom: 1rem;">Sign In / Register</button>
             <p id="auth-msg" style="text-align: center; font-size: 0.85rem; height: 1rem;"></p>
 
@@ -46,12 +46,12 @@
     </footer>
 
     <script>
-        function handleAuth() {
+function handleAuth() {
     const email = document.getElementById('user-email').value.trim();
     const password = document.getElementById('user-pass').value;
     const msg = document.getElementById('auth-msg');
 
-    // Strict email format check
+    // Strict email format validation check
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         msg.style.color = "#ef4444";
@@ -66,7 +66,7 @@
         return;
     }
 
-    // If both pass, log them in
+    // If valid, save session and login
     localStorage.setItem('userEmail', email);
     msg.style.color = "#22c55e";
     msg.innerText = "Successfully logged in as " + email;
@@ -75,6 +75,63 @@
         window.location.href = "index.html";
     }, 1500);
 }
-    </script>
-</body>
-</html>
+
+    let generatedCode = '';
+
+function sendVerificationCode() {
+    const email = document.getElementById('user-email').value.trim();
+    const msg = document.getElementById('auth-msg');
+
+    // Strict email format check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        msg.style.color = "#ef4444";
+        msg.innerText = "Please enter a valid email address.";
+        return;
+    }
+
+    // Generate a random 6-digit code
+    generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Template parameters matching your EmailJS template
+    const templateParams = {
+        to_email: email,
+        verification_code: generatedCode
+    };
+
+    msg.style.color = "#3b82f6";
+    msg.innerText = "Sending verification code...";
+
+    // Send the email via EmailJS
+    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+        .then(function(response) {
+            msg.style.color = "#22c55e";
+            msg.innerText = "Code sent! Check your inbox.";
+            
+            // Switch UI to show the code input box instead of password
+            document.getElementById('code-section').style.display = 'block';
+        }, function(error) {
+            msg.style.color = "#ef4444";
+            msg.innerText = "Failed to send email. Try again.";
+        });
+}
+
+function verifyAndLogin() {
+    const email = document.getElementById('user-email').value.trim();
+    const userEnteredCode = document.getElementById('verification-code').value.trim();
+    const msg = document.getElementById('auth-msg');
+
+    if (userEnteredCode === generatedCode) {
+        localStorage.setItem('userEmail', email);
+        msg.style.color = "#22c55e";
+        msg.innerText = "Email verified successfully! Logging in...";
+        
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 1500);
+    } else {
+        msg.style.color = "#ef4444";
+        msg.innerText = "Invalid verification code. Try again.";
+    }
+}
+</script>
