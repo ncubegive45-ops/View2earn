@@ -35,11 +35,14 @@
                 <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Password</label>
                 <input type="password" id="user-pass" placeholder="••••••••" minlength="8" required ...>
                 
-            <button onclick="handleAuth()" class="watch-btn" style="background-color: var(--primary); margin-bottom: 1rem;">Sign In / Register</button>
-            <p id="auth-msg" style="text-align: center; font-size: 0.85rem; height: 1rem;"></p>
-
+            <div id="code-section" style="display: none; margin-top: 1.25rem; margin-bottom: 1.5rem;">
+    <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Enter 6-Digit Code</label>
+    <input type="text" id="verification-code" placeholder="123456" maxlength="6" style="width: 100%; padding: 0.75rem; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; margin-bottom: 1rem;">
+    <button onclick="verifyAndLogin()" class="watch-btn" style="width: 100%; background-color: #22c55e; color: white; border: none; padding: 0.75rem; border-radius: 8px; font-weight: bold; cursor: pointer;">Verify & Login</button>
         </div>
-    </main>
+
+<button onclick="sendVerificationCode()" class="watch-btn" style="width: 100%;">Send Verification Code</button>
+<p id="auth-msg" style="text-align: center; font-size: 0.85rem; height: 1rem; margin-top: 0.75rem;"></p>
 
     <footer>
         <p>&copy; 2026 View2Earn. All rights reserved.</p>
