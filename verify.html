@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - View2Earn</title>
+    <!-- Include your main stylesheet links here if applicable -->
+</head>
+<body style="background-color: #0f172a; color: #f8fafc; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+
+    <div style="max-width: 400px; width: 100%; padding: 2rem; background: #1e293b; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+        <h2 style="text-align: center; margin-bottom: 0.5rem;">Enter Verification Code</h2>
+        <p style="text-align: center; font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.5rem;">We've sent a 6-digit code to your email inbox.</p>
+
+        <div style="margin-bottom: 1.5rem;">
+            <input type="text" id="verification-code" placeholder="123456" maxlength="6" style="width: 100%; padding: 0.75rem; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; font-size: 1.25rem; text-align: center; letter-spacing: 0.25rem;">
+        </div>
+
+        <button onclick="verifyCodeAndLogin()" class="watch-btn" style="width: 100%; padding: 0.75rem; background: #6366f1; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Verify & Login</button>
+        
+        <p id="verify-msg" style="text-align: center; font-size: 0.85rem; height: 1.5rem; margin-top: 1rem;"></p>
+    </div>
+
+    <script>
+        function verifyCodeAndLogin() {
+            const userEnteredCode = document.getElementById('verification-code').value.trim();
+            const expectedCode = localStorage.getItem('expectedCode');
+            const email = localStorage.getItem('pendingEmail');
+            const msg = document.getElementById('verify-msg');
+
+            if (userEnteredCode === expectedCode) {
+                localStorage.setItem('userEmail', email);
+                msg.style.color = "#22c55e";
+                msg.innerText = "Email verified successfully! Logging in...";
+
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1500);
+            } else {
+                msg.style.color = "#ef4444";
+                msg.innerText = "Invalid verification code. Try again.";
+            }
+        }
+    </script>
+</body>
+</html>
