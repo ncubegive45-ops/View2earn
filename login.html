@@ -49,43 +49,18 @@
     </footer>
 
     <script>
-function handleAuth() {
-    const email = document.getElementById('user-email').value.trim();
-    const password = document.getElementById('user-pass').value;
-    const msg = document.getElementById('auth-msg');
+(function(){
+    emailjs.init({
+       publicKey: "YOUR_PUBLIC_KEY",
+    });
+})();
 
-    // Strict email format validation check
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        msg.style.color = "#ef4444";
-        msg.innerText = "Please enter a valid email address.";
-        return;
-    }
-
-    // 8-character minimum password check
-    if (password.length < 8) {
-        msg.style.color = "#ef4444";
-        msg.innerText = "Password must be at least 8 characters.";
-        return;
-    }
-
-    // If valid, save session and login
-    localStorage.setItem('userEmail', email);
-    msg.style.color = "#22c55e";
-    msg.innerText = "Successfully logged in as " + email;
-
-    setTimeout(() => {
-        window.location.href = "index.html";
-    }, 1500);
-}
-
-    let generatedCode = '';
+let generatedCode = '';
 
 function sendVerificationCode() {
     const email = document.getElementById('user-email').value.trim();
     const msg = document.getElementById('auth-msg');
 
-    // Strict email format check
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         msg.style.color = "#ef4444";
@@ -93,10 +68,8 @@ function sendVerificationCode() {
         return;
     }
 
-    // Generate a random 6-digit code
     generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Template parameters matching your EmailJS template
     const templateParams = {
         to_email: email,
         verification_code: generatedCode
@@ -105,18 +78,15 @@ function sendVerificationCode() {
     msg.style.color = "#3b82f6";
     msg.innerText = "Sending verification code...";
 
-    // Send the email via EmailJS
     emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams)
-        .then(function(response) {
-            msg.style.color = "#22c55e";
-            msg.innerText = "Code sent! Check your inbox.";
-            
-            // Switch UI to show the code input box instead of password
-            document.getElementById('code-section').style.display = 'block';
-        }, function(error) {
-            msg.style.color = "#ef4444";
-            msg.innerText = "Failed to send email. Try again.";
-        });
+    .then(function(response) {
+        msg.style.color = "#22c55e";
+        msg.innerText = "Code sent! Check your inbox.";
+        document.getElementById('code-section').style.display = 'block';
+    }, function(error) {
+        msg.style.color = "#ef4444";
+        msg.innerText = "Failed to send email. Try again.";
+    });
 }
 
 function verifyAndLogin() {
@@ -128,7 +98,7 @@ function verifyAndLogin() {
         localStorage.setItem('userEmail', email);
         msg.style.color = "#22c55e";
         msg.innerText = "Email verified successfully! Logging in...";
-        
+
         setTimeout(() => {
             window.location.href = "index.html";
         }, 1500);
@@ -137,4 +107,3 @@ function verifyAndLogin() {
         msg.innerText = "Invalid verification code. Try again.";
     }
 }
-</script>
