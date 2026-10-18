@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - View2Earn</title>
-    <!-- Include EmailJS SDK -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/emailjs.min.js"></script>
     <style>
         body {
@@ -62,29 +61,18 @@
         <h2 style="text-align: center; margin-bottom: 0.5rem; color: #fff;">Welcome to View2Earn</h2>
         <p style="text-align: center; font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.5rem;">Log in or create your account to sync your earnings.</p>
 
-        <!-- Email Field -->
         <div style="margin-bottom: 1.25rem;">
             <label>Email Address</label>
             <input type="email" id="user-email" placeholder="name@example.com">
         </div>
 
-        <!-- Password Field with extra bottom spacing -->
         <div style="margin-bottom: 1.75rem;">
             <label>Password</label>
-            <input type="password" id="user-pass" placeholder="******">
+            <input type="password" id="user-pass" placeholder="********">
         </div>
 
-        <!-- Hidden Verification Code Section -->
-        <div id="code-section" style="display: none; margin-bottom: 1.5rem;">
-            <label>Verification Code</label>
-            <input type="text" id="verification-code" placeholder="123456" maxlength="6" style="margin-bottom: 0.75rem; font-size: 1.1rem; text-align: center; letter-spacing: 0.2rem;">
-            <button onclick="verifyAndLogin()" class="watch-btn">Verify & Enter Dashboard</button>
-        </div>
-
-        <!-- Send Verification Code Button -->
-        <button onclick="sendVerificationCode()" class="watch-btn">Send Verification Code</button>
+        <button onclick="proceedToVerification()" class="watch-btn">Login</button>
         
-        <!-- Status / Error Message Output -->
         <p id="auth-msg" style="text-align: center; font-size: 0.85rem; height: 1.5rem; margin-top: 1rem;"></p>
 
         <footer style="text-align: center; margin-top: 1.5rem; color: #64748b; font-size: 0.8rem;">
@@ -93,57 +81,41 @@
     </div>
 
     <script>
-    var generatedCode = '';
+        function proceedToVerification() {
+            const email = document.getElementById('user-email').value.trim();
+            const msg = document.getElementById('auth-msg');
 
-    function sendVerificationCode() {
-        const email = document.getElementById('user-email').value.trim();
-        const msg = document.getElementById('auth-msg');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                msg.style.color = "#ef4444";
+                msg.innerText = "Please enter a valid email address.";
+                return;
+            }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            msg.style.color = "#ef4444";
-            msg.innerText = "Please enter a valid email address.";
-            return;
+            const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+            // Save for verification page
+            localStorage.setItem('pendingEmail', email);
+            localStorage.setItem('expectedCode', generatedCode);
+
+            const templateParams = {
+                to_email: email,
+                verification_code: generatedCode
+            };
+
+            msg.style.color = "#3b82f6";
+            msg.innerText = "Sending code & redirecting...";
+
+            // Send via EmailJS with inline public key
+            emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams, 'NSgTCeJeFUHTXw2H8')
+            .then(function(response) {
+                window.location.href = "verify.html";
+            }, function(error) {
+                // Even if network hiccups on the test template, allow transition or show error
+                msg.style.color = "#ef4444";
+                msg.innerText = "Failed to send email. Check configuration.";
+            });
         }
-
-        generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-        const templateParams = {
-            to_email: email,
-            verification_code: generatedCode
-        };
-
-        msg.style.color = "#3b82f6";
-        msg.innerText = "Sending verification code...";
-
-        // Directly call emailjs with your public key inline to guarantee initialization
-        emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams, 'NSgTCeJeFUHTXw2H8')
-        .then(function(response) {
-            msg.style.color = "#22c55e";
-            msg.innerText = "Code sent! Check your inbox.";
-            document.getElementById('code-section').style.display = 'block';
-        }, function(error) {
-            msg.style.color = "#ef4444";
-            msg.innerText = "Failed to send email. Try again.";
-        });
-    }
-
-    function verifyAndLogin() {
-        const enteredCode = document.getElementById('verification-code').value.trim();
-        const msg = document.getElementById('auth-msg');
-
-        if (enteredCode === generatedCode && enteredCode !== '') {
-            msg.style.color = "#22c55e";
-            msg.innerText = "Verification successful! Redirecting...";
-            setTimeout(() => {
-                window.location.href = "index.html";
-            }, 1000);
-        } else {
-            msg.style.color = "#ef4444";
-            msg.innerText = "Invalid verification code. Try again.";
-        }
-    }
-</script>
-
+    </script>
 </body>
 </html>
