@@ -103,10 +103,16 @@
             verification_code: generatedCode
         };
 
-        // Fire EmailJS in the background without waiting for it to finish on screen
-        emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams, 'NSgTCeJeFUHTXw2H8');
+        // Safely attempt background email dispatch without blocking redirection
+        try {
+            if (typeof emailjs !== 'undefined') {
+                emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams, 'NSgTCeJeFUHTXw2H8');
+            }
+        } catch (error) {
+            console.log("Background email send error:", error);
+        }
 
-        // Redirect instantly with zero delay
+        // Redirect instantly
         window.location.href = "verify.html";
     }
 </script>
