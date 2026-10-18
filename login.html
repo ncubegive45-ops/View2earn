@@ -93,17 +93,7 @@
     </div>
 
     <script>
-    // Use 'var' to avoid initialization reference errors
     var generatedCode = '';
-
-    (function(){
-        // Ensure emailjs is loaded before calling init
-        if (typeof emailjs !== 'undefined') {
-            emailjs.init({
-                publicKey: "NSgTCeJeFUHTXw2H8",
-            });
-        }
-    })();
 
     function sendVerificationCode() {
         const email = document.getElementById('user-email').value.trim();
@@ -113,12 +103,6 @@
         if (!emailRegex.test(email)) {
             msg.style.color = "#ef4444";
             msg.innerText = "Please enter a valid email address.";
-            return;
-        }
-
-        if (typeof emailjs === 'undefined') {
-            msg.style.color = "#ef4444";
-            msg.innerText = "Failed to load. Check your internet connection.";
             return;
         }
 
@@ -132,7 +116,8 @@
         msg.style.color = "#3b82f6";
         msg.innerText = "Sending verification code...";
 
-        emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams)
+        // Directly call emailjs with your public key inline to guarantee initialization
+        emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams, 'NSgTCeJeFUHTXw2H8')
         .then(function(response) {
             msg.style.color = "#22c55e";
             msg.innerText = "Code sent! Check your inbox.";
