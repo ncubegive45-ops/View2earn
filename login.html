@@ -94,7 +94,7 @@
 
         const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // Save data for the verification page immediately
+        // Save data for verification page
         localStorage.setItem('pendingEmail', email);
         localStorage.setItem('expectedCode', generatedCode);
 
@@ -103,17 +103,22 @@
             verification_code: generatedCode
         };
 
-        // Safely attempt background email dispatch without blocking redirection
-        try {
-            if (typeof emailjs !== 'undefined') {
-                emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams, 'NSgTCeJeFUHTXw2H8');
-            }
-        } catch (error) {
-            console.log("Background email send error:", error);
-        }
+        msg.style.color = "#3b82f6";
+        msg.innerText = "Sending code to your email...";
 
-        // Redirect instantly
-        window.location.href = "verify.html";
+        // Wait for EmailJS to complete sending before redirecting
+        emailjs.send('service_rxwbmke', 'template_default', templateParams, 'NSgTCeJeFUHTXw2H8')
+        .then(function(response) {
+            msg.style.color = "#22c55e";
+            msg.innerText = "Code sent successfully! Redirecting...";
+            setTimeout(() => {
+                window.location.href = "verify.html";
+            }, 1000);
+        }, function(error) {
+            msg.style.color = "#ef4444";
+            msg.innerText = "Failed to send email. Check your template ID.";
+            console.log("EmailJS Error:", error);
+        });
     }
 </script>
 
