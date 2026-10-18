@@ -81,41 +81,35 @@
     </div>
 
     <script>
-        function proceedToVerification() {
-            const email = document.getElementById('user-email').value.trim();
-            const msg = document.getElementById('auth-msg');
+    function proceedToVerification() {
+        const email = document.getElementById('user-email').value.trim();
+        const msg = document.getElementById('auth-msg');
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                msg.style.color = "#ef4444";
-                msg.innerText = "Please enter a valid email address.";
-                return;
-            }
-
-            const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-            // Save for verification page
-            localStorage.setItem('pendingEmail', email);
-            localStorage.setItem('expectedCode', generatedCode);
-
-            const templateParams = {
-                to_email: email,
-                verification_code: generatedCode
-            };
-
-            msg.style.color = "#3b82f6";
-            msg.innerText = "Sending code & redirecting...";
-
-            // Send via EmailJS with inline public key
-            emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams, 'NSgTCeJeFUHTXw2H8')
-            .then(function(response) {
-                window.location.href = "verify.html";
-            }, function(error) {
-                // Even if network hiccups on the test template, allow transition or show error
-                msg.style.color = "#ef4444";
-                msg.innerText = "Failed to send email. Check configuration.";
-            });
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            msg.style.color = "#ef4444";
+            msg.innerText = "Please enter a valid email address.";
+            return;
         }
-    </script>
+
+        const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Save data for the verification page immediately
+        localStorage.setItem('pendingEmail', email);
+        localStorage.setItem('expectedCode', generatedCode);
+
+        const templateParams = {
+            to_email: email,
+            verification_code: generatedCode
+        };
+
+        // Fire EmailJS in the background without waiting for it to finish on screen
+        emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams, 'NSgTCeJeFUHTXw2H8');
+
+        // Redirect instantly with zero delay
+        window.location.href = "verify.html";
+    }
+</script>
+
 </body>
 </html>
