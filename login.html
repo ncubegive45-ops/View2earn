@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - View2Earn</title>
+    <!-- Include EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/emailjs.min.js"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            max-width: 400px;
+            width: 100%;
+            padding: 2rem;
+            background: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .watch-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .watch-btn:hover {
+            background: #4f46e5;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: #fff;
+            box-sizing: border-box;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2 style="text-align: center; margin-bottom: 0.5rem; color: #fff;">Welcome to View2Earn</h2>
+        <p style="text-align: center; font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.5rem;">Log in or create your account to sync your earnings.</p>
+
+        <!-- Email Field -->
+        <div style="margin-bottom: 1.25rem;">
+            <label>Email Address</label>
+            <input type="email" id="user-email" placeholder="name@example.com">
+        </div>
+
+        <!-- Password Field with extra bottom spacing -->
+        <div style="margin-bottom: 1.75rem;">
+            <label>Password</label>
+            <input type="password" id="user-pass" placeholder="******">
+        </div>
+
+        <!-- Hidden Verification Code Section -->
+        <div id="code-section" style="display: none; margin-bottom: 1.5rem;">
+            <label>Verification Code</label>
+            <input type="text" id="verification-code" placeholder="123456" maxlength="6" style="margin-bottom: 0.75rem; font-size: 1.1rem; text-align: center; letter-spacing: 0.2rem;">
+            <button onclick="verifyAndLogin()" class="watch-btn">Verify & Enter Dashboard</button>
+        </div>
+
+        <!-- Send Verification Code Button -->
+        <button onclick="sendVerificationCode()" class="watch-btn">Send Verification Code</button>
+        
+        <!-- Status / Error Message Output -->
+        <p id="auth-msg" style="text-align: center; font-size: 0.85rem; height: 1.5rem; margin-top: 1rem;"></p>
+
+        <footer style="text-align: center; margin-top: 1.5rem; color: #64748b; font-size: 0.8rem;">
+            <p>&copy; 2026 View2Earn. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+    // Use 'var' to avoid initialization reference errors
+    var generatedCode = '';
+
+    (function(){
+        // Ensure emailjs is loaded before calling init
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init({
+                publicKey: "NSgTCeJeFUHTXw2H8",
+            });
+        }
+    })();
+
+    function sendVerificationCode() {
+        const email = document.getElementById('user-email').value.trim();
+        const msg = document.getElementById('auth-msg');
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            msg.style.color = "#ef4444";
+            msg.innerText = "Please enter a valid email address.";
+            return;
+        }
+
+        if (typeof emailjs === 'undefined') {
+            msg.style.color = "#ef4444";
+            msg.innerText = "Failed to load. Check your internet connection.";
+            return;
+        }
+
+        generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+        const templateParams = {
+            to_email: email,
+            verification_code: generatedCode
+        };
+
+        msg.style.color = "#3b82f6";
+        msg.innerText = "Sending verification code...";
+
+        emailjs.send('service_rxwbmke', '__ejs-test-mail-service__', templateParams)
+        .then(function(response) {
+            msg.style.color = "#22c55e";
+            msg.innerText = "Code sent! Check your inbox.";
+            document.getElementById('code-section').style.display = 'block';
+        }, function(error) {
+            msg.style.color = "#ef4444";
+            msg.innerText = "Failed to send email. Try again.";
+        });
+    }
+
+    function verifyAndLogin() {
+        const enteredCode = document.getElementById('verification-code').value.trim();
+        const msg = document.getElementById('auth-msg');
+
+        if (enteredCode === generatedCode && enteredCode !== '') {
+            msg.style.color = "#22c55e";
+            msg.innerText = "Verification successful! Redirecting...";
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 1000);
+        } else {
+            msg.style.color = "#ef4444";
+            msg.innerText = "Invalid verification code. Try again.";
+        }
+    }
+</script>
+
+</body>
+</html>
